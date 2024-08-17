@@ -7,22 +7,18 @@ from sklearn.model_selection import cross_validate
 
 
 class ObjectiveFunctionWrapper:
-    def __init__(self, estimator, X, y) -> None:
+    def __init__(self, estimator, X, y, cv=3) -> None:
         self.estimator = estimator
         self.X = X
         self.y = y
+        self.cv = cv
 
     def objective_function(self, params):
-        scores = cross_validate(
+        cv_results = cross_validate(
             self.estimator,
             self.X,
             self.y,
             cv=self.cv,
-            error_score=self.error_score,
-            params=self.fit_params,
-            groups=self.groups,
-            return_train_score=self.return_train_score,
-            scoring=self.scoring,
         )
 
-        return scores["test_score"].mean()
+        return cv_results["test_score"].mean()

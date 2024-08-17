@@ -15,17 +15,25 @@ from .objective_function_wrapper import ObjectiveFunctionWrapper
 
 
 class HyperactiveSearchCV(BaseEstimator):
-    def __init__(self, estimator, hyperactive_tuner, params_config):
+    def __init__(self, estimator, optimizer, params_config):
         self.estimator = estimator
+        self.optimizer = optimizer
         self.params_config = params_config
 
     def fit(self, X, y):
         objective_function = ObjectiveFunctionWrapper(
-            self.estimator
+            self.estimator,
+            X=X,
+            y=y,
         ).objective_function
 
         hyper = Hyperactive()
-        hyper.add_search(objective_function, search_space=self.params_config)
+        hyper.add_search(
+            objective_function,
+            search_space=self.params_config,
+            optimizer=self.optimizer,
+            n_iter=20,
+        )
         hyper.run()
 
     def score(self, X, y):
