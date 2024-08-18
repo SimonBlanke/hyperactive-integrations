@@ -44,45 +44,43 @@ class HyperactiveSearchCV(BaseSearchCV):
         estimator,
         optimizer,
         params_config,
+        n_iter=100,
         *,
         scoring=None,
-        n_jobs=None,
+        n_jobs=1,
         refit=True,
         cv=None,
-        verbose=0,
-        pre_dispatch="2*n_jobs",
-        error_score=np.nan,
-        return_train_score=False,
     ):
         super().__init__(
             estimator=estimator,
             scoring=scoring,
-            n_jobs=n_jobs,
             refit=refit,
             cv=cv,
-            verbose=verbose,
-            pre_dispatch=pre_dispatch,
-            error_score=error_score,
-            return_train_score=return_train_score,
         )
 
         self.estimator = estimator
         self.optimizer = optimizer
         self.params_config = params_config
+        self.n_iter = n_iter
         self.scoring = scoring
+        self.n_jobs = n_jobs
+        self.refit = refit
+        self.cv = cv
 
     def fit(self, X, y):
         objective_function_adapter = ObjectiveFunctionAdapter(
             self.estimator,
         )
         objective_function_adapter.add_dataset(X, y)
+        objective_function_adapter.add_validation(self.scoring, self.cv)
 
         hyper = Hyperactive()
         hyper.add_search(
             objective_function_adapter.objective_function,
             search_space=self.params_config,
             optimizer=self.optimizer,
-            n_iter=20,
+            n_iter=self.n_iter,
+            n_jobs=self.n_jobs,
         )
         hyper.run()
 

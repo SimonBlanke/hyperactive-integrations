@@ -8,14 +8,16 @@ from sklearn.utils.validation import _num_samples
 
 
 class ObjectiveFunctionAdapter:
-    def __init__(self, estimator, cv, scoring) -> None:
+    def __init__(self, estimator) -> None:
         self.estimator = estimator
-
-        self.cv = cv
 
     def add_dataset(self, X, y):
         self.X = X
         self.y = y
+
+    def add_validation(self, scoring, cv):
+        self.scoring = scoring
+        self.cv = cv
 
     def objective_function(self, params):
         cv_results = cross_validate(
