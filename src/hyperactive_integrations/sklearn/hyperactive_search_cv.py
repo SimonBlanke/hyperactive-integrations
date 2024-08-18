@@ -7,7 +7,6 @@ import numpy as np
 
 from sklearn.base import BaseEstimator
 from sklearn.model_selection._search import BaseSearchCV
-
 from hyperactive import Hyperactive
 
 from .objective_function_adapter import ObjectiveFunctionAdapter
@@ -58,3 +57,5 @@ class HyperactiveSearchCV(BaseSearchCV):
             n_jobs=self.n_jobs,
         )
         hyper.run()
+
+        return self
