@@ -12,7 +12,7 @@ from hyperactive import Hyperactive
 from .objective_function_adapter import ObjectiveFunctionAdapter
 
 
-class HyperactiveSearchCV(BaseSearchCV):
+class HyperactiveSearchCV(BaseEstimator):
     def __init__(
         self,
         estimator,
@@ -25,12 +25,6 @@ class HyperactiveSearchCV(BaseSearchCV):
         refit=True,
         cv=None,
     ):
-        super().__init__(
-            estimator=estimator,
-            scoring=scoring,
-            refit=refit,
-            cv=cv,
-        )
 
         self.estimator = estimator
         self.optimizer = optimizer
