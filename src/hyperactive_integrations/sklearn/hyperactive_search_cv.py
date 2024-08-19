@@ -3,12 +3,9 @@
 # License: MIT License
 
 
-import numpy as np
-
 from sklearn.base import BaseEstimator
-from sklearn.model_selection._search import BaseSearchCV
 from sklearn.metrics import check_scoring
-from sklearn.utils.validation import indexable
+from sklearn.utils.validation import indexable, _check_method_params
 
 from hyperactive import Hyperactive
 
@@ -16,6 +13,7 @@ from .objective_function_adapter import ObjectiveFunctionAdapter
 
 
 class HyperactiveSearchCV(BaseEstimator):
+
     def __init__(
         self,
         estimator,
@@ -39,9 +37,11 @@ class HyperactiveSearchCV(BaseEstimator):
         self.refit = refit
         self.cv = cv
 
-    def fit(self, X, y):
+    def fit(self, X, y, **params):
         X, y = indexable(X, y)
+        X, y = self._validate_data(X, y)
 
+        params = _check_method_params(X, params=params)
         self.scorer_ = check_scoring(self.estimator, scoring=self.scoring)
 
         objective_function_adapter = ObjectiveFunctionAdapter(
