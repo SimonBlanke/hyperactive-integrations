@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.base import BaseEstimator
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.metrics import check_scoring
+from sklearn.utils.validation import indexable
 
 from hyperactive import Hyperactive
 
@@ -39,6 +40,8 @@ class HyperactiveSearchCV(BaseEstimator):
         self.cv = cv
 
     def fit(self, X, y):
+        X, y = indexable(X, y)
+
         self.scorer_ = check_scoring(self.estimator, scoring=self.scoring)
 
         objective_function_adapter = ObjectiveFunctionAdapter(
