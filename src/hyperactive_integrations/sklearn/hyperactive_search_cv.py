@@ -13,6 +13,7 @@ from .objective_function_adapter import ObjectiveFunctionAdapter
 
 
 class HyperactiveSearchCV(BaseEstimator):
+    _required_parameters = ["estimator", "optimizer", "params_config"]
 
     def __init__(
         self,
