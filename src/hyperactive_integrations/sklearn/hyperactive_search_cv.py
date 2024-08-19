@@ -24,16 +24,17 @@ class HyperactiveSearchCV(BaseEstimator):
         *,
         scoring=None,
         n_jobs=1,
+        random_state=None,
         refit=True,
         cv=None,
     ):
-
         self.estimator = estimator
         self.optimizer = optimizer
         self.params_config = params_config
         self.n_iter = n_iter
         self.scoring = scoring
         self.n_jobs = n_jobs
+        self.random_state = random_state
         self.refit = refit
         self.cv = cv
 
@@ -53,6 +54,7 @@ class HyperactiveSearchCV(BaseEstimator):
             optimizer=self.optimizer,
             n_iter=self.n_iter,
             n_jobs=self.n_jobs,
+            random_state=self.random_state,
         )
         hyper.run()
 
